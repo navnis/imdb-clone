@@ -1,0 +1,137 @@
+[
+    {
+        "title": "Avatar",
+        "year": "2009",
+        "genre": "Action, Adventure, Fantasy",
+        "director": "James Cameron",
+        "actors": "Sam Worthington, Zoe Saldana, Sigourney Weaver, Stephen Lang",
+        "language": "English, Spanish",
+        "id": "tt0499549"
+    },
+    {
+        "title": "I Am Legend",
+        "year": "2007",
+        "genre": "Drama, Horror, Sci-Fi",
+        "director": "Francis Lawrence",
+        "actors": "Will Smith, Alice Braga, Charlie Tahan, Salli Richardson-Whitfield",
+        "language": "English",
+        "id": "tt0480249"
+    },
+    {
+        "title": "300",
+        "year": "2006",
+        "genre": "Action, Drama, Fantasy",
+        "director": "Zack Snyder",
+        "actors": "Gerard Butler, Lena Headey, Dominic West, David Wenham",
+        "language": "English",
+        "id": "tt0416449"
+    },
+    {
+        "title": "The Avengers",
+        "year": "2012",
+        "genre": "Action, Sci-Fi, Thriller",
+        "director": "Joss Whedon",
+        "actors": "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth",
+        "language": "English, Russian",
+        "id": "tt0848228"
+    },
+    {
+        "title": "The Wolf of Wall Street",
+        "year": "2013",
+        "genre": "Biography, Comedy, Crime",
+        "director": "Martin Scorsese",
+        "actors": "Leonardo DiCaprio, Jonah Hill, Margot Robbie, Matthew McConaughey",
+        "language": "English, French",
+        "id": "tt0993846"
+    },
+    {
+        "title": "Interstellar",
+        "year": "2014",
+        "genre": "Adventure, Drama, Sci-Fi",
+        "director": "Christopher Nolan",
+        "actors": "Ellen Burstyn, Matthew McConaughey, Mackenzie Foy, John Lithgow",
+        "language": "English",
+        "id": "tt0816692"
+    },
+    {
+        "title": "Game of Thrones",
+        "year": "2011–",
+        "genre": "Adventure, Drama, Fantasy",
+        "director": "N/A",
+        "actors": "Peter Dinklage, Lena Headey, Emilia Clarke, Kit Harington",
+        "language": "English",
+        "id": "tt0944947"
+    },
+    {
+        "title": "Vikings",
+        "year": "2013–",
+        "genre": "Action, Drama, History",
+        "director": "N/A",
+        "actors": "Travis Fimmel, Clive Standen, Gustaf Skarsgård, Katheryn Winnick",
+        "language": "English, Old English, Norse, Old, Latin",
+        "id": "tt2306299"
+    },
+    {
+        "title": "Gotham",
+        "year": "2014–",
+        "genre": "Action, Crime, Drama",
+        "director": "N/A",
+        "actors": "Ben McKenzie, Donal Logue, David Mazouz, Sean Pertwee",
+        "language": "English",
+        "id": "tt3749900"
+    },
+    {
+        "title": "Power",
+        "year": "2014–",
+        "genre": "Crime, Drama",
+        "director": "N/A",
+        "actors": "Omari Hardwick, Joseph Sikora, Andy Bean, Lela Loren",
+        "language": "English",
+        "id": "tt3281796"
+    },
+    {
+        "title": "Narcos",
+        "year": "2015–",
+        "genre": "Biography, Crime, Drama",
+        "director": "N/A",
+        "actors": "Wagner Moura, Boyd Holbrook, Pedro Pascal, Joanna Christie",
+        "language": "English, Spanish",
+        "id": "tt2707408"
+    },
+    {
+        "title": "Breaking Bad",
+        "year": "2008–2013",
+        "genre": "Crime, Drama, Thriller",
+        "director": "N/A",
+        "actors": "Bryan Cranston, Anna Gunn, Aaron Paul, Dean Norris",
+        "language": "English, Spanish",
+        "id": "tt0903747"
+    },
+    {
+        "title": "Doctor Strange",
+        "year": "2016",
+        "genre": "Action, Adventure, Fantasy",
+        "director": "Scott Derrickson",
+        "actors": "Rachel McAdams, Benedict Cumberbatch, Mads Mikkelsen, Tilda Swinton",
+        "language": "English",
+        "id": "tt1211837"
+    },
+    {
+        "title": "Assassin's Creed",
+        "year": "2016",
+        "genre": "Action, Adventure, Fantasy",
+        "director": "Justin Kurzel",
+        "actors": "Michael Fassbender, Michael Kenneth Williams, Marion Cotillard, Jeremy Irons",
+        "language": "English",
+        "id": "tt2094766"
+    },
+    {
+        "title": "Luke Cage",
+        "year": "2016–",
+        "genre": "Action, Crime, Drama",
+        "director": "N/A",
+        "actors": "Mahershala Ali, Mike Colter, Frankie Faison, Erik LaRay Harvey",
+        "language": "English",
+        "id": "tt3322314"
+    }
+]
