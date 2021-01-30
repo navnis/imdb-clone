@@ -9,13 +9,14 @@ const Movies = require('../models/movie')
 
 const postMovieVal = (body) => {
     const val = joi.string().required()
+    const val2 = joi.array().items(joi.string()).required()
     const schema = joi.object({
         title: val,
-        year: val,
-        genre: val,
-        director: val,
-        actors: val,
-        language: val,
+        year: joi.number().min(1000).required(),
+        genre: val2,
+        director: val2,
+        actors: val2,
+        language: joi.array().items(joi.string().valid("en", "hi", "ja", "pa")).required(),
     })
 
     return schema.validate(body)
@@ -23,15 +24,15 @@ const postMovieVal = (body) => {
 
 const patchMovieVal = (body) => {
     const val = joi.string()
+    const val2 = joi.array().items(joi.string())
     const schema = joi.object({
         title: val,
-        year: val,
-        genre: val,
-        director: val,
-        actors: val,
-        language: val,
+        year: joi.number().min(1000),
+        genre: val2,
+        director: val2,
+        actors: val2,
+        language: joi.array().items(joi.string().valid("en", "hi", "ja", "pa")),
     })
-
     return schema.validate(body)
 }
 
@@ -41,7 +42,7 @@ const patchMovieVal = (body) => {
 
 const getAllMovies = async (req, res) => {
     try {
-        const allMovies = await Movies.find()
+        const allMovies = await Movies.find().select("-__v")
         res.send({ success: true, result: allMovies })
     } catch (error) {
         res.status(400).send({ success: false, error: error.message })
@@ -63,7 +64,7 @@ const getSingleMovieById = async (req, res) => {
             })
         }
 
-        const movie = await Movies.findById(id).lean()
+        const movie = await Movies.findById(id).lean().select("-__v")
 
         if (!movie) {
             return res.status(404).send({
