@@ -2,7 +2,6 @@
 const joi = require('joi')
 const mongoose = require('mongoose')
 const { isValidObjectId } = require('../validations/commonValidation')
-const movies = [{}]
 const Movies = require('../models/movie')
 
 ////////////////Schemas////////////////////////////////
@@ -45,7 +44,7 @@ const getAllMovies = async (req, res) => {
         const allMovies = await Movies.find().select("-__v")
         res.send({ success: true, result: allMovies })
     } catch (error) {
-        res.status(400).send({ success: false, error: error.message })
+        res.status(501).send({ success: false, error: error.message })
     }
 }
 
@@ -76,7 +75,7 @@ const getSingleMovieById = async (req, res) => {
         res.send({ success: true, result: movie })
 
     } catch (error) {
-        res.status(400).send({ success: false, error: error.message })
+        res.status(501).send({ success: false, error: error.message })
     }
 }
 
@@ -106,7 +105,7 @@ const postMovie = async (req, res) => {
         res.send({ success: true, result: newMovie })
 
     } catch (error) {
-        res.status(400).send({ success: false, error: error.message })
+        res.status(501).send({ success: false, error: error.message })
     }
 }
 
@@ -114,13 +113,7 @@ const postMovie = async (req, res) => {
 
 const patchMovie = async (req, res) => {
     try {
-        const { error } = patchMovieVal(req.body)
-        if (error) {
-            return res.status(400).send({
-                success: false,
-                error: error.details[0].message
-            })
-        }
+
 
         const { id } = req.params
 
@@ -130,6 +123,14 @@ const patchMovie = async (req, res) => {
             return res.status(400).send({
                 success: false,
                 error: "Invalid Id"
+            })
+        }
+
+        const { error } = patchMovieVal(req.body)
+        if (error) {
+            return res.status(400).send({
+                success: false,
+                error: error.details[0].message
             })
         }
 
@@ -158,7 +159,7 @@ const patchMovie = async (req, res) => {
         res.send({ success: true, result: updatedMovieData })
 
     } catch (error) {
-        res.status(400).send({ success: false, error: error.message })
+        res.status(501).send({ success: false, error: error.message })
 
     }
 }
@@ -194,7 +195,7 @@ const deleteMovie = async (req, res) => {
         res.send({ success: true, message: "Deleted Successfully" })
 
     } catch (error) {
-        res.status(400).send({ success: false, error: error.message })
+        res.status(501).send({ success: false, error: error.message })
 
     }
 }

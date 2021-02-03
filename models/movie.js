@@ -32,8 +32,8 @@ const movieSchema = new mongoose.Schema({
     }
 })
 
+
 movieSchema.post(/^findOne/, function (document) {
-    console.log(this.getFilter(), "document")
     document.genre = document.genre.join(", ")
     document.actors = document.actors.join(", ")
     document.director = document.director.join(", ")
