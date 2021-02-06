@@ -17,15 +17,17 @@ const movieSchema = new mongoose.Schema({
         type: [String],
         required: true
     },
-    director: {
-        type: [String],
-        required: true
-    },
-    actors: {
-        type: [String],
-        required: true
-    },
-    language: {
+    directors: [{
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "peoples"
+    }],
+    actors: [{
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "peoples"
+    }],
+    languages: {
         type: [String],
         required: true,
         enum: ["en", "hi", "ja", "pa"]
@@ -34,10 +36,13 @@ const movieSchema = new mongoose.Schema({
 
 
 movieSchema.post(/^findOne/, function (document) {
-    document.genre = document.genre.join(", ")
-    document.actors = document.actors.join(", ")
-    document.director = document.director.join(", ")
-    document.language = document.language.join(", ")
+    if (document) {
+        document.genre = document.genre.join(", ")
+        document.actors = document.actors.join(", ")
+        document.director = document.director.join(", ")
+        document.language = document.language.join(", ")
+    }
+
 })
 
 module.exports = mongoose.model("movies", movieSchema)

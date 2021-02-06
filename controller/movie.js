@@ -13,9 +13,9 @@ const postMovieVal = (body) => {
         title: val,
         year: joi.number().min(1000).required(),
         genre: val2,
-        director: val2,
+        directors: val2,
         actors: val2,
-        language: joi.array().items(joi.string().valid("en", "hi", "ja", "pa")).required(),
+        languages: joi.array().items(joi.string().valid("en", "hi", "ja", "pa")).required(),
     })
 
     return schema.validate(body)
@@ -28,9 +28,9 @@ const patchMovieVal = (body) => {
         title: val,
         year: joi.number().min(1000),
         genre: val2,
-        director: val2,
+        directors: val2,
         actors: val2,
-        language: joi.array().items(joi.string().valid("en", "hi", "ja", "pa")),
+        languages: joi.array().items(joi.string().valid("en", "hi", "ja", "pa")),
     })
     return schema.validate(body)
 }
@@ -41,7 +41,10 @@ const patchMovieVal = (body) => {
 
 const getAllMovies = async (req, res) => {
     try {
-        const allMovies = await Movies.find().select("-__v")
+        const allMovies = await Movies.find().populate([{
+            path: "actors directors",
+            select: "name"
+        }])
         res.send({ success: true, result: allMovies })
     } catch (error) {
         res.status(501).send({ success: false, error: error.message })

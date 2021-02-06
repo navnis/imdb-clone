@@ -1,5 +1,5 @@
 const routes = require('express').Router()
-const movieController = require('../controller/movies')
+const movieController = require('../controller/movie')
 
 
 //get all movies
