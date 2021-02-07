@@ -3,6 +3,7 @@ const joi = require('joi')
 const mongoose = require('mongoose')
 const { isValidObjectId } = require('../validations/commonValidation')
 const Movies = require('../models/movie')
+const MovieAndCinemas = require('../models/movieAndCinema')
 
 ////////////////Schemas////////////////////////////////
 
@@ -75,9 +76,58 @@ const getSingleMovieById = async (req, res) => {
             })
         }
 
+        // const allCinemas = await MovieAndCinemas.find({ movieId: id }).populate({
+        //     path: "cinemaId",
+        //     select: {
+        //         _id: 1,
+        //         name: 1,
+        //         address: 1,
+        //         city: 1
+        //     },
+        // }).select("-_id -movieId").lean()
+
+        const allCinemas = await MovieAndCinemas.aggregate([
+            {
+                $match: {
+                    movieId: movie._id
+                }
+            },
+            {
+                $lookup: {
+                    from: "cinemas",
+                    localField: "cinemaId",
+                    foreignField: "_id",
+                    as: "cinema"
+                }
+            },
+            {
+                $project: {
+                    cinema: 1,
+                    _id: 0,
+                    movieId: 1,
+                }
+            }, {
+                $unwind: "$cinema"
+            }
+            , {
+                $project: {
+                    'cinema.location': 0
+                }
+            },
+            {
+                $group: {
+                    '_id': '$movieId',
+                    'allCinemas': {
+                        "$push": "$cinema"
+                    }
+                }
+            }
+        ])
+        movie.cinemas = allCinemas[0].allCinemas
         res.send({ success: true, result: movie })
 
     } catch (error) {
+        console.log(error)
         res.status(501).send({ success: false, error: error.message })
     }
 }

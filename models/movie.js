@@ -35,14 +35,14 @@ const movieSchema = new mongoose.Schema({
 })
 
 
-movieSchema.post(/^findOne/, function (document) {
-    if (document) {
-        document.genre = document.genre.join(", ")
-        document.actors = document.actors.join(", ")
-        document.director = document.director.join(", ")
-        document.language = document.language.join(", ")
-    }
+// movieSchema.post(/^findOne/, function (document) {
+//     if (document) {
+//         document.genre = document.genre.join(", ")
+//         document.actors = document.actors.join(", ")
+//         document.director = document.director.join(", ")
+//         document.language = document.language.join(", ")
+//     }
 
-})
+// })
 
 module.exports = mongoose.model("movies", movieSchema)

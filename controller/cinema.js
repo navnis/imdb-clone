@@ -1,5 +1,6 @@
 const joi = require('joi')
 const Cinemas = require('../models/cinema')
+const MovieCinemas = require('../models/movieAndCinema')
 const responseHandler = require('../utils/responseHandler')
 const { isValidObjectId } = require('../validations/commonValidation')
 
@@ -49,9 +50,63 @@ getSingleCinema = async (req, res) => {
         const isValidId = isValidObjectId(id)
         if (!isValidId) return responseHandler({ res, error: { message: "Invalid Id" }, status: 404 })
 
-        const cinema = await Cinemas.findById(id).populate("movies")
+        const cinema = await Cinemas.findById(id).lean()
         if (!cinema) return responseHandler({ res, error: { message: "Cinema with this id not found" }, status: 404 })
 
+        // const findAllMovies = await MovieCinemas.find({ cinemaId: id }).populate({
+        //     path: "movieId",
+        //     select: {
+        //         _id: 1,
+        //         genre: 1,
+        //         actors: 1,
+        //         languages: 1,
+        //         title: 1,
+        //         year: 1
+        //     },
+        //     populate: {
+        //         path: "actors",
+        //         select: {
+        //             _id: 1,
+        //             name: 1
+        //         }
+        //     }
+        // }).select("-cinemaId -_id").lean()
+
+
+        const findAllMovies = await MovieCinemas.aggregate([
+
+            {
+                $match: { cinemaId: cinema._id }
+            },
+            {
+                $lookup: {
+                    from: "movies",
+                    localField: "movieId",
+                    foreignField: "_id",
+                    as: "movie"
+                }
+            }, {
+                $unwind: "$movie"
+            },
+            {
+                $project: {
+                    _id: 0,
+                    cinemaId: 1,
+                    movie: 1
+                }
+            },
+            {
+                $group: {
+                    '_id': '$cinemaId',
+                    'allmovies': {
+                        "$push": "$movie"
+                    }
+                }
+            }
+
+        ])
+
+        cinema.movies = findAllMovies[0].allmovies
         responseHandler({ res, data: cinema })
 
     } catch (error) {
