@@ -27,6 +27,12 @@ const movieSchema = new mongoose.Schema({
         required: true,
         ref: "peoples"
     }],
+    format: {
+        type: [String],
+        default: "2D",
+        enum: ["2D", "3D", "4D", "4DX", "4DX 3D", "5D", "6D", "7D", "IMAX 3D"]
+
+    },
     languages: {
         type: [String],
         required: true,

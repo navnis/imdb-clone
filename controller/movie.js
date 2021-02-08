@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const { isValidObjectId } = require('../validations/commonValidation')
 const Movies = require('../models/movie')
 const MovieAndCinemas = require('../models/movieAndCinema')
+const Cinemas = require('../models/cinema')
 
 ////////////////Schemas////////////////////////////////
 
@@ -16,6 +17,7 @@ const postMovieVal = (body) => {
         genre: val2,
         directors: val2,
         actors: val2,
+        format: joi.array().items(joi.string().valid("2D", "3D", "4D", "4DX", "4DX 3D", "5D", "6D", "7D", "IMAX 3D")),
         languages: joi.array().items(joi.string().valid("en", "hi", "ja", "pa")).required(),
     })
 
@@ -31,6 +33,7 @@ const patchMovieVal = (body) => {
         genre: val2,
         directors: val2,
         actors: val2,
+        format: joi.array().items(joi.string().valid("2D", "3D", "4D", "4DX", "4DX 3D", "5D", "6D", "7D", "IMAX 3D")),
         languages: joi.array().items(joi.string().valid("en", "hi", "ja", "pa")),
     })
     return schema.validate(body)
@@ -42,16 +45,83 @@ const patchMovieVal = (body) => {
 
 const getAllMovies = async (req, res) => {
     try {
-        const allMovies = await Movies.find().populate([{
-            path: "actors directors",
-            select: "name"
-        }])
-        res.send({ success: true, result: allMovies })
+
+        const { city } = req.query
+
+        const allMatchCases = {}
+        Object.keys(req.query).forEach(key => {
+            const queryKeyValue = req.query[key]
+            switch (key) {
+                case "city":
+                    allMatchCases["cinemas.city"] = queryKeyValue
+                    break;
+                case "genre":
+                case "language":
+                case "format":
+                    allMatchCases[`movies.${key}`] = {
+                        $in: [queryKeyValue]
+                    }
+                    break;
+                default:
+                    break;
+            }
+        })
+
+        if (!city) {
+            const allMovies = await Movies.find().populate([{
+                path: "actors directors",
+                select: "name"
+            }])
+            res.send({ success: true, result: allMovies })
+        } else {
+            const [allMovies] = await MovieAndCinemas.aggregate([
+                {
+                    $lookup: {
+                        from: Cinemas.collection.name,
+                        localField: "cinemaId",
+                        foreignField: "_id",
+                        as: "cinemas",
+                    }
+                },
+                {
+                    $lookup: {
+                        from: Movies.collection.name,
+                        localField: "movieId",
+                        foreignField: "_id",
+                        as: "movies",
+                    }
+                }
+                ,
+                {
+                    $match: allMatchCases
+                },
+                {
+                    $project: {
+                        movies: 1,
+                        _id: 0
+                    }
+                }
+                ,
+                {
+                    $unwind: "$movies"
+                },
+                {
+                    $group: {
+                        _id: null,
+                        movies: {
+                            "$push": "$movies"
+                        }
+                    }
+                }
+            ])
+            res.send({ success: true, result: allMovies.movies })
+
+        }
+
     } catch (error) {
         res.status(501).send({ success: false, error: error.message })
     }
 }
-
 
 
 const getSingleMovieById = async (req, res) => {
@@ -116,8 +186,8 @@ const getSingleMovieById = async (req, res) => {
             },
             {
                 $group: {
-                    '_id': '$movieId',
-                    'allCinemas': {
+                    _id: '$movieId',
+                    allCinemas: {
                         "$push": "$cinema"
                     }
                 }
