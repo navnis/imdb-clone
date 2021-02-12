@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose')
+const jwt = require('jsonwebtoken')
 
 const UserSchema = new Schema({
 
@@ -35,6 +36,13 @@ const UserSchema = new Schema({
     }
 
 })
+
+UserSchema.methods.generateAuthToken = function () {
+    const { JWTKEY, TOKEN_EXPIRY } = process.env
+    return jwt.sign({
+        userId: this._id
+    }, JWTKEY, { expiresIn: TOKEN_EXPIRY })
+}
 
 
 module.exports = model("users", UserSchema)

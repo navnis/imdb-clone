@@ -20,6 +20,14 @@ const postVal = (body) => {
     return schema.validate(body)
 }
 
+const signInVal = (body) => {
+    const schema = joi.object({
+        email: joi.string().email().required(),
+        password: joi.string().required()
+    })
+    return schema.validate(body)
+}
+
 /////////////-------********----////////////////////////
 
 
@@ -42,7 +50,6 @@ const getSingleUser = () => {
 
 }
 
-
 const createUser = async (req, res) => {
     try {
         const { email, password, countryCode, phone } = req.body
@@ -61,9 +68,11 @@ const createUser = async (req, res) => {
 
         const newUser = await Users.create({ ...req.body, password: encryptedPaswd })
 
+        const token = newUser.generateAuthToken()
+
         const { password: temp, ...newUserData } = newUser._doc
 
-        responseHandler({ data: newUserData, res })
+        responseHandler({ data: { user: newUserData, token }, res })
 
     } catch (error) {
         responseHandler({ res, error, status: 501 })
@@ -71,8 +80,38 @@ const createUser = async (req, res) => {
 }
 
 
+const signInUser = async (req, res) => {
+    try {
+        const { error } = signInVal(req.body)
+        if (error) return responseHandler({ res, error: { message: error.details[0].message }, status: 404 })
+
+        const { email, password } = req.body
+        const user = await Users.findOne({ email }).select("password _id name email phone countryCode")
+        if (!user) return responseHandler({ res, error: { message: "Invalid Email or password" }, status: 400 })
+
+        const pswdMatch = bcrypt.compareSync(password, user.password)
+        if (!pswdMatch) return responseHandler({ res, error: { message: "Invalid Email or password" }, status: 400 })
+
+        const token = user.generateAuthToken()
+        const { password: temp, ...userData } = user._doc
+        responseHandler({ data: { user: userData, token }, res })
+
+    } catch (error) {
+        responseHandler({ res, error, status: 501 })
+    }
+}
+
+const forgotPassword = async (req, res) => {
+
+}
+
+
+
+
 module.exports = {
     getAllusers,
     getSingleUser,
-    createUser
+    createUser,
+    signInUser,
+    forgotPassword
 }

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
+const { DB_CONNECTION, DATABASE } = process.env
 
-mongoose.connect('mongodb://localhost:27017/imdb', {
+mongoose.connect(DB_CONNECTION + DATABASE, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true

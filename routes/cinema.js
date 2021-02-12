@@ -1,5 +1,6 @@
 const routes = require('express').Router()
 const cinemaController = require('../controller/cinema')
+const { userAuth } = require('../middleware/auth')
 
 
 
@@ -7,11 +8,11 @@ routes.get('/', cinemaController.getAllCinemas)
 
 routes.get('/:id', cinemaController.getSingleCinema)
 
-routes.post('/', cinemaController.addCinema)
+routes.post('/', userAuth, cinemaController.addCinema)
 
-routes.patch('/:id', cinemaController.modifyCinema)
+routes.patch('/:id', userAuth, cinemaController.modifyCinema)
 
-routes.delete('/:id', cinemaController.deleteCinema)
+routes.delete('/:id', userAuth, cinemaController.deleteCinema)
 
 
 module.exports = routes

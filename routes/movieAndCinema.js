@@ -1,16 +1,17 @@
 const routes = require('express').Router()
 const movieAndCinemaController = require('../controller/movieAndCinema')
+const { userAuth } = require('../middleware/auth')
 
 
-routes.get('/', movieAndCinemaController.getAllMovieAndCinema)
+routes.get('/', userAuth, movieAndCinemaController.getAllMovieAndCinema)
 
-routes.get('/:id', movieAndCinemaController.getSingleMovieAndCinema)
+routes.get('/:id', userAuth, movieAndCinemaController.getSingleMovieAndCinema)
 
-routes.post('/', movieAndCinemaController.addMovieAndCinema)
+routes.post('/', userAuth, movieAndCinemaController.addMovieAndCinema)
 
-routes.patch('/:id', movieAndCinemaController.modifyMovieAndCinema)
+routes.patch('/:id', userAuth, movieAndCinemaController.modifyMovieAndCinema)
 
-routes.delete('/:id', movieAndCinemaController.deleteMovieAndCinema)
+routes.delete('/:id', userAuth, movieAndCinemaController.deleteMovieAndCinema)
 
 
 module.exports = routes
