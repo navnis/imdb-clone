@@ -45,9 +45,12 @@ const patchPersonVal = (data) => {
 
 // get all people
 const getAllPeople = async (req, res) => {
+
     try {
-        const allPeople = await People.find()
-        responseHandler({ data: allPeople, res })
+        const { limit = 20, offset = 0, sortKey = "name", sortOrder = 1 } = req.query
+        const allPeople = await People.find().collation({ locale: "en", strength: 2 }).sort({ [sortKey]: sortOrder }).limit(+limit || 20).skip(+offset || 0)
+        const totalCount = await People.countDocuments()
+        responseHandler({ data: { result: allPeople, totalCount }, res })
     } catch (error) {
         responseHandler({ res, error, status: 501 })
     }
