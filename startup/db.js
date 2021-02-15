@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
-const { DB_CONNECTION, DATABASE } = process.env
+const { DB_CONNECTION, DATABASE, DB_USERNAME, DB_PASSWORD, DB_HOST, DB_NAME } = process.env
 
-mongoose.connect(DB_CONNECTION + DATABASE, {
+
+const url = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`
+
+mongoose.connect(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
