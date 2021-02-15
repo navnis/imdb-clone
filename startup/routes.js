@@ -7,6 +7,7 @@ const movieAndCinemaRouter = require('../routes/movieAndCinema')
 const userRouter = require('../routes/user')
 
 module.exports = (app) => {
+    app.use(express.urlencoded())
     app.use(express.json())
     app.use('/movies', movieRouter)
     app.use('/people', peopleRouter)
